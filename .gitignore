@@ -1,0 +1,5 @@
+#ignore metada from worldbank because described in README file
+metadata
+.venv/*
+venv
+__pycache__
