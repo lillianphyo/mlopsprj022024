@@ -1,36 +1,6 @@
 # Rice Price Forecasting
 
-Rice price forecasting is critical for Myanmar’s economy, especially in key cities like Yangon and Mandalay. The goal is to predict rice prices accurately, considering market dynamics, historical data, and external factors. We’ll leverage Machine Learning (ML) techniques, specifically Long Short-Term Memory (LSTM) networks, to achieve this. Additionally, we’ll implement MLOps practices to streamline the development and deployment process.
-
-## Key Components
-
-1. **Data Collection and Preprocessing** :
-
-   * Gather historical data on rice prices in Yangon and Mandalay.
-   * Include relevant features such as weather data, production levels, and import/export statistics.
-   * Clean and preprocess the data for model training.
-2. Feature Engineering:
-
-   * Create meaningful features from raw data:
-     * Lagged prices (previous day/week prices).
-     * Seasonal indicators (time of year, monsoon season, etc.).
-     * Economic indicators (exchange rates, inflation, etc.).
-3. Model Selection and Training:
-
-   * Utilize LSTM networks for time series forecasting.
-   * Split data into training and validation sets.
-   * Tune hyperparameters (e.g., hidden units, learning rate).
-4. MLOps Integration:
-
-   * **Grafana** : Set up monitoring dashboards to visualize model performance and data trends.
-   * **Docker** : Containerize the LSTM model for consistent deployment across environments.
-   * **Python Unit Tests** : Develop robust unit tests to validate model functionality.
-   * **S3** : Store historical data and model artifacts securely.
-   * **MLflow** : Track experiments, manage model versions, and facilitate collaboration.
-5. Challenges:
-
-   * **Limited Data Availability** : Myanmar’s rice market data may be sparse or incomplete.
-   * **External Factors** : Political instability, trade policies, and climate change can impact prices.
+Rice price forecasting is critical for Myanmar’s economy. The models are trained on historical rice price data for different regions and can be used to predict future prices. The goal is to predict rice prices accurately, considering market dynamics, historical data, and external factors. We’ll leverage Machine Learning (ML) techniques, specifically Long Short-Term Memory (LSTM) networks, to achieve this. Additionally, we’ll implement MLOps practices to streamline the development and deployment process.
 
 ## Data Catalog
 
@@ -59,12 +29,114 @@ In this scenerio, dataset was gathered from [worldbank.org](https://microdata.wo
 |      | inflation_rice    |                            | inflation_rice provides the 12-month inflation rate, or price change rate, for commodity rice.<br />This metric is calculated by comparing the current price against the price from 12 months prior, giving an annualized percentage change. <br />Inflation rates are crucial economic indicators, reflecting the purchasing power and cost of living changes. <br />For a more comprehensive understanding of overall inflation, analyzing a basket of food items rather than single commodities is recommended, as it offers a broader perspective of general price trends. <br />This data is instrumental in economic planning, policy making, and understanding the macroeconomic environment.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 |      | trust_rice        |                            | trust_rice offers a trust score, ranging from 1-10, reflecting the reliability of the inflation calculation for rice.<br />These scores are specific to each market, time period, and commodity, considering the data availability and accuracy for the preceding 12 months. <br />Higher scores indicate greater confidence and robustness in the inflation figures, based on the quality and quantity of data used and the cross-validated accuracy of imputed data. <br />This score is key for users to assess the credibility and dependability of the inflation data, aiding in more informed economic and financial analysis. A score of 10 corresponds to an entry for which up to 12 months of preceding data has been fully observed. <br />Values below 6 highlight observations generated with extremely low confidence.                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 
+## Project Structure
 
+```
+.
+├── config.py
+├── data
+│   ├── input.csv
+│   ├── model
+│   ├── plots
+│   └── process
+├── docker-compose.yml
+├── Dockerfile
+├── logs
+├── PredictionAPI
+│   ├── app
+│   ├── config.py
+│   ├── run.py
+│   └── wsgi.py
+├── README.md
+├── requirements.txt
+├── setup.py
+└── utils
+    ├── evaluation.py
+    ├── loadmodel.py
+    ├── main.py
+    ├── predict.py
+    ├── preprocessing.py
+    └── train.py
+```
 
-## Installation
+## Getting Started
 
-### Pre requesticies
+### 1. Initialize the Environment
 
-Docker
+1. Clone the repository:
 
-Python3
+   ```bash
+   git clone https://github.com/lillianphyo/mlopsprj022024.git
+   cd mlopsprj022024
+   ```
+2. Create a virtual environment and activate it:
+
+   ```bash
+   python3 -m venv .venv
+   source .venv/bin/activate
+   ```
+3. Install the required dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   <or>
+   pip install -e .
+   ```
+
+### 2. Train the Model
+
+To train the LSTM models for each market, you can use the `setup.py` script. The command will train the model and log the training process, including accuracy metrics like MAE, RMSE, and MSE, to MLflow.
+
+1. Train the model:
+   ```bash
+   python setup.py train
+   <or>
+   train-model
+   ```
+
+### 3. Run Tests
+
+To ensure that the project components are working correctly, you can run tests using `pytest`.
+
+1. Run the tests:
+   ```bash
+   python setup.py test
+   ```
+
+### 4. Run the Flask Prediction API
+
+You can expose the trained model as a Flask API using Docker. The API allows you to make predictions for specific regions based on the latest available data.
+
+1. Build and run the Docker container:
+
+   ```bash
+   docker-compose up --build
+   ```
+2. The API should now be running at `http://localhost:5000`. You can use `curl` or any other tool to make requests to the API.
+
+### 5. Example `curl` Command
+
+Here’s an example of how to use `curl` to make a prediction:
+
+```bash
+curl -X POST http://localhost:5000/predict \
+-H "Content-Type: application/json" \
+-d '{
+    "geo_id": "yangon",
+    "o_rice": 1050,
+    "h_rice": 1070,
+    "l_rice": 1030,
+    "c_rice": 1060
+}'
+```
+
+This command sends a request to the prediction API with the latest rice prices for the Yangon region. The API will return the predicted price.
+
+## Logging and Monitoring
+
+- **MLflow**: Logs and tracks model training, including accuracy metrics.
+- **Logging**: Logs the training process and model summaries.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
