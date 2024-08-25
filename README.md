@@ -132,6 +132,41 @@ curl -X POST http://localhost:5000/predict \
 
 This command sends a request to the prediction API with the latest rice prices for the Yangon region. The API will return the predicted price.
 
+### 6. MLFLOW
+
+To run the training model with ml flow, please use /mlflow folder. Please make sure, running the mlflow before training the model. Incert the mlflow url in config.py.
+
+```
+...
+mlflow_tracking_uri = 'http://localhost:8080'
+```
+
+```
+mlflow server --host 127.0.0.1 --port 8080
+```
+
+```
+python mlflow/main.py
+```
+
+### The Metric from MLflow
+
+The Exprement Metrics from MLflow are as follow.
+
+![1724547939775](image/README/1724547939775.png)
+
+![1724548005685](image/README/1724548005685.png)
+
+![1724548055912](image/README/1724548055912.png)
+
+![1724548108181](image/README/1724548108181.png)
+
+![1724548149190](image/README/1724548149190.png)
+
+![1724548235480](image/README/1724548235480.png)
+
+![1724548267615](image/README/1724548267615.png)
+
 ## Logging and Monitoring
 
 - **MLflow**: Logs and tracks model training, including accuracy metrics.
