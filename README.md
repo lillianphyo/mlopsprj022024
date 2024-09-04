@@ -2,6 +2,10 @@
 
 Rice price forecasting is critical for Myanmar’s economy. The models are trained on historical rice price data for different regions and can be used to predict future prices. The goal is to predict rice prices accurately, considering market dynamics, historical data, and external factors. We’ll leverage Machine Learning (ML) techniques, specifically Long Short-Term Memory (LSTM) networks, to achieve this. Additionally, we’ll implement MLOps practices to streamline the development and deployment process.
 
+# Architecture
+
+![1725445890718](image/README/1725445890718.png)
+
 ## Data Catalog
 
 In this scenerio, dataset was gathered from [worldbank.org](https://microdata.worldbank.org/index.php/catalog/4501/data-dictionary/MMR_2021_RTFP_MKT?file_name=MMR_RTFP_mkt_2008_2024-06-17.csv) .
